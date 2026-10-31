@@ -93,6 +93,15 @@ pnpm integration:test
 - `docs/hackathon-demo.md`: short live-demo walkthrough, checklist, Wispr test,
   and honest fallbacks.
 
+## Hosted demo deployment
+
+The merged integration is deployed to [spark-hackathon-demo.vercel.app](https://spark-hackathon-demo.vercel.app).
+The deployment uses same-origin `/api/v1` requests, Secure/HttpOnly cookies,
+and server-side Supabase/Groq configuration. It was built from merged commit
+`99d0b9194b7612c8f6cdac8e97a924d21f9c9700`; no migrations, seed, or synthetic
+account provisioning run during Vercel builds. See the Vercel deployment section
+of `docs/verification-report.md` for observed live checks and limitations.
+
 ## Wire conventions
 
 Tutor successes return the documented object or array directly. They are never
