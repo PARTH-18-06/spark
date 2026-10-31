@@ -348,3 +348,43 @@ refresh and concurrency checks are recorded below.
 
 See [`docs/hackathon-demo.md`](hackathon-demo.md) for the 3–5 minute walkthrough,
 startup command, pre-demo checklist, Wispr manual check, and honest fallbacks.
+
+## Vercel deployment verification (Prompt 14)
+
+- PR #1 (`integration/spark-fullstack`) was merged into `main` as commit
+  `99d0b9194b7612c8f6cdac8e97a924d21f9c9700`. The teammate's `Abhishek` branch
+  was not changed.
+- The merged commit was deployed from a clean checkout to the personal Vercel
+  project `spark-hackathon-demo` (Hobby plan). Vercel deployment id was
+  `dpl_Ggop27EwLLQnYmNhEG2eEimZRKDV`; the deployment was `READY` and targeted
+  `production`.
+- Shareable HTTPS URL: [https://spark-hackathon-demo.vercel.app](https://spark-hackathon-demo.vercel.app)
+  (the deployment-specific URL was
+  `https://spark-hackathon-demo-khrxiaaun-parthgautam056-5456s-projects.vercel.app`).
+- Vercel was configured for Next.js with `pnpm install --frozen-lockfile` and
+  `pnpm build`. Only server-side Supabase/Groq/auth settings and the two
+  `NEXT_PUBLIC_TUTOR_API_*` adapter settings were configured. Development
+  provisioning, integration controls, synthetic credentials, migrations, and
+  seeds were not configured as deployment variables and do not run at build
+  time. Secrets were entered through Vercel's environment-variable tooling and
+  are not present in Git or this report.
+- Live HTTPS checks observed after deployment:
+  - `GET /api/v1/system/health`: HTTP 200, `status: ok`, service
+    `spark-backend`.
+  - `pnpm exec vitest run --config vitest.integration.config.ts` with the
+    approved synthetic test accounts: **1 test file / 1 test passed**, covering
+    **17/17 tutor operations**, real Groq grading, Supabase persistence,
+    reload/history, CSRF and role boundaries.
+  - A headless browser against the deployed URL passed student sign-in,
+    dashboard rendering in live HTTP mode, sign-out/auth revocation, teacher
+    sign-in, and authorized class-dashboard rendering.
+  - A mutation from `Origin: https://evil.example` was rejected with HTTP 403
+    and `FORBIDDEN`.
+- The deployment was built from the exact merged checkout commit above. The
+  Vercel CLI deployment metadata did not include a Git SHA because this was a
+  CLI deployment, so commit provenance is established by the clean checkout
+  `HEAD` and the inspected merged commit before deployment.
+- Physical Wispr microphone/dictation remains unverified. The historical
+  provider-refresh and genuine concurrency/recovery evidence remains recorded
+  in the Prompt 12 section above; no new database reset, seed, provisioning, or
+  credential rotation was performed for this deployment.
